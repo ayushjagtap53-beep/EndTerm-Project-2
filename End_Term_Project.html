@@ -8,7 +8,6 @@
     body {
       font-family: Arial, sans-serif;
       padding: 30px;
-
       background:
         linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
         url("https://images.unsplash.com/photo-1554224155-6726b3ff858f");
@@ -17,31 +16,29 @@
       background-attachment: fixed;
     }
 
+    
     .title-box {
-  text-align: center;
-  margin-bottom: 35px;
-}
+      text-align: center;
+      margin-bottom: 35px;
+    }
 
-.title {
-  display: inline-block;
-  padding: 10px 28px;
-  font-size: 40px;
-  font-weight: bold;
-  color: white;
+    .title {
+      display: inline-block;
+      padding: 10px 28px;
+      font-size: 40px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(90deg, #2e7d32, #66bb6a);
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+    }
 
-  background: linear-gradient(90deg, #2e7d32, #66bb6a);
-  border-radius: 12px;
-
-  box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
-}
-
-.subtitle {
-  margin-top: 10px;
-  color: #dddddd;
-  font-size: 16px;
-  letter-spacing: 1px;
-}
-
+    .subtitle {
+      margin-top: 10px;
+      color: #dddddd;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
 
     .top-section {
       display: flex;
@@ -75,10 +72,6 @@
       border-radius: 6px;
     }
 
-    input::placeholder {
-      color: #666;
-    }
-
     button {
       background: #4CAF50;
       color: white;
@@ -97,7 +90,12 @@
     }
 
     li {
-      margin: 8px 0;
+      margin: 10px 0;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #555;
     }
 
     .full-width {
@@ -105,7 +103,7 @@
       width: 75%;
     }
 
-    /* Mobile responsive */
+    
     @media (max-width: 768px) {
       .top-section {
         flex-direction: column;
@@ -130,20 +128,23 @@
 <body>
 
   <div class="title-box">
-  <h1 class="title">Expense Manager</h1>
-  <p class="subtitle">Track • Analyze • Control Your Spending</p>
-</div>
-
+    <h1 class="title">Expense Manager</h1>
+    <p class="subtitle">Track • Analyze • Control Your Spending</p>
+  </div>
 
   <div class="top-section">
 
+   
     <div class="card">
-      <h2>Monthly Income</h2>
-      <input type="number" id="income" placeholder="Enter your income">
+      <h2>Add Balance</h2>
+      <input type="number" id="balanceInput" placeholder="Enter amount">
+      <button onclick="addBalance()">Add Balance</button>
     </div>
 
+    
     <div class="card">
       <h2>Add Expense</h2>
+
       <input type="number" id="amount" placeholder="Expense amount">
 
       <select id="category">
@@ -154,45 +155,75 @@
         <option>Other</option>
       </select>
 
+  
+      <input type="text" id="note" placeholder="Add a note (optional)">
+
       <button onclick="addExpense()">Add Expense</button>
     </div>
 
+  
     <div class="card">
       <h2>Summary</h2>
       <p>Total Expense: ₹<span id="totalExpense">0</span></p>
-      <p>Balance: ₹<span id="balance">0</span></p>
+      <p>Current Balance: ₹<span id="balance">0</span></p>
     </div>
 
   </div>
 
+ 
   <div class="card full-width">
     <h2>Expense List</h2>
     <ul id="expenseList"></ul>
   </div>
 
   <script>
+    let balance = 0;
     let totalExpense = 0;
 
+    function addBalance() {
+      let amount = Number(document.getElementById("balanceInput").value);
+
+      if (amount <= 0) {
+        alert("Enter a valid balance amount");
+        return;
+      }
+
+      balance += amount;
+      document.getElementById("balance").innerText = balance;
+      document.getElementById("balanceInput").value = "";
+    }
+
     function addExpense() {
-      let income = Number(document.getElementById("income").value);
       let amount = Number(document.getElementById("amount").value);
       let category = document.getElementById("category").value;
+      let note = document.getElementById("note").value;
 
       if (amount <= 0) {
         alert("Enter a valid expense amount");
         return;
       }
 
+      if (amount > balance) {
+        alert("Not enough balance!");
+        return;
+      }
+
+      balance -= amount;
       totalExpense += amount;
 
+      document.getElementById("balance").innerText = balance;
       document.getElementById("totalExpense").innerText = totalExpense;
-      document.getElementById("balance").innerText = income - totalExpense;
 
       let li = document.createElement("li");
-      li.innerText = category + " - ₹" + amount;
+      li.innerHTML = `
+        <strong>${category}</strong> - ₹${amount}
+        ${note ? `<div class="note">Note: ${note}</div>` : ""}
+      `;
+
       document.getElementById("expenseList").appendChild(li);
 
       document.getElementById("amount").value = "";
+      document.getElementById("note").value = "";
     }
   </script>
 
