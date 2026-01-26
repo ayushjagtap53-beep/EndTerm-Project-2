@@ -3,126 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Expense Manager</title>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      background:
-        linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
-        url("https://images.unsplash.com/photo-1554224155-6726b3ff858f");
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-    }
-
-    
-    .title-box {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-
-    .title {
-      display: inline-block;
-      padding: 10px 28px;
-      font-size: 40px;
-      font-weight: bold;
-      color: white;
-      background: linear-gradient(90deg, #2e7d32, #66bb6a);
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
-    }
-
-    .subtitle {
-      margin-top: 10px;
-      color: #dddddd;
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-
-    .top-section {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    .card {
-      background: rgba(245, 245, 245, 0.88);
-      color: #222;
-      padding: 25px 40px 25px 25px;
-      width: 350px;
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(4px);
-    }
-
-    h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 12px;
-      font-size: 16px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #000;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    button {
-      background: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #43a047;
-    }
-
-    ul {
-      padding-left: 22px;
-      font-size: 16px;
-    }
-
-    li {
-      margin: 10px 0;
-    }
-
-    .note {
-      font-size: 14px;
-      color: #555;
-    }
-
-    .full-width {
-      margin: 30px auto;
-      width: 75%;
-    }
-
-    
-    @media (max-width: 768px) {
-      .top-section {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .card {
-        width: 90%;
-      }
-
-      .full-width {
-        width: 90%;
-      }
-
-      .title {
-        font-size: 30px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -134,17 +15,16 @@
 
   <div class="top-section">
 
-   
+    <!-- Add Balance -->
     <div class="card">
       <h2>Add Balance</h2>
       <input type="number" id="balanceInput" placeholder="Enter amount">
       <button onclick="addBalance()">Add Balance</button>
     </div>
 
-    
+    <!-- Add Expense -->
     <div class="card">
       <h2>Add Expense</h2>
-
       <input type="number" id="amount" placeholder="Expense amount">
 
       <select id="category">
@@ -155,13 +35,11 @@
         <option>Other</option>
       </select>
 
-  
       <input type="text" id="note" placeholder="Add a note (optional)">
-
       <button onclick="addExpense()">Add Expense</button>
     </div>
 
-  
+    <!-- Summary -->
     <div class="card">
       <h2>Summary</h2>
       <p>Total Expense: ₹<span id="totalExpense">0</span></p>
@@ -170,62 +48,12 @@
 
   </div>
 
- 
+  <!-- Expense List -->
   <div class="card full-width">
     <h2>Expense List</h2>
     <ul id="expenseList"></ul>
   </div>
 
-  <script>
-    let balance = 0;
-    let totalExpense = 0;
-
-    function addBalance() {
-      let amount = Number(document.getElementById("balanceInput").value);
-
-      if (amount <= 0) {
-        alert("Enter a valid balance amount");
-        return;
-      }
-
-      balance += amount;
-      document.getElementById("balance").innerText = balance;
-      document.getElementById("balanceInput").value = "";
-    }
-
-    function addExpense() {
-      let amount = Number(document.getElementById("amount").value);
-      let category = document.getElementById("category").value;
-      let note = document.getElementById("note").value;
-
-      if (amount <= 0) {
-        alert("Enter a valid expense amount");
-        return;
-      }
-
-      if (amount > balance) {
-        alert("Not enough balance!");
-        return;
-      }
-
-      balance -= amount;
-      totalExpense += amount;
-
-      document.getElementById("balance").innerText = balance;
-      document.getElementById("totalExpense").innerText = totalExpense;
-
-      let li = document.createElement("li");
-      li.innerHTML = `
-        <strong>${category}</strong> - ₹${amount}
-        ${note ? `<div class="note">Note: ${note}</div>` : ""}
-      `;
-
-      document.getElementById("expenseList").appendChild(li);
-
-      document.getElementById("amount").value = "";
-      document.getElementById("note").value = "";
-    }
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
